@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgentLend AI Test UI</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #111a2e;
+      --text: #e6eefc;
+      --muted: #9fb3d8;
+      --accent: #4f8cff;
+      --accent2: #2dd4bf;
+      --danger: #ef4444;
+      --border: #24314f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg, #081023 0%, #0b1220 100%);
+      color: var(--text);
+    }
+    .container {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 0 16px 24px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0;
+    }
+    .subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .row-1 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    label {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0 0 4px;
+    }
+    input {
+      width: 100%;
+      background: #0a1428;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 0.92rem;
+    }
+    button {
+      border: 0;
+      color: white;
+      background: var(--accent);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-top: 8px;
+    }
+    button.secondary { background: #334155; }
+    button.success { background: var(--accent2); color: #06251f; }
+    button.danger { background: var(--danger); }
+    pre {
+      margin: 10px 0 0;
+      background: #060d1d;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      max-height: 320px;
+      overflow: auto;
+      font-size: 0.82rem;
+      line-height: 1.3;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .hint {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-top: 8px;
+    }
+    .pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .mt8 {
+      margin-top: 8px;
+    }
+    .ok {
+      color: #22c55e;
+      font-size: 0.82rem;
+      margin-top: 6px;
+    }
+    .bad {
+      color: #f87171;
+      font-size: 0.82rem;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1 class="title">AgentLend AI — Simple Test UI</h1>
+        <p class="subtitle">Test your backend endpoints without curl commands.</p>
+      </div>
+      <span class="pill" id="apiBasePill">API: http://localhost:8000</span>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <h3>1) Health Check</h3>
+        <button onclick="runHealth()">GET /health</button>
+        <pre id="healthOut">Click to run health check…</pre>
+      </section>
+
+      <section class="card">
+        <h3>2) Loan Request</h3>
+        <div class="row-1">
+          <div>
+            <label for="wallet">Wallet Address</label>
+            <input id="wallet" value="0xd724Fa9201aC6cd9a4dcAF6F4BD6E62a3B062442" placeholder="0x + 40 hex chars" />
+            <div id="walletState" class="ok">Wallet format looks valid.</div>
+          </div>
+        </div>
+        <button class="secondary" onclick="fillTreasuryWallet()">Use Treasury Wallet</button>
+        <button class="secondary" onclick="copyWalletToLogs()">Use Same Wallet in Decision Logs</button>
+        <div class="row">
+          <div>
+            <label for="amount">Loan Amount</label>
+            <input id="amount" type="number" step="0.01" value="50" />
+          </div>
+          <div>
+            <label for="duration">Loan Duration (days)</label>
+            <input id="duration" type="number" value="30" />
+          </div>
+        </div>
+        <button class="success" onclick="submitLoan()">POST /loan/request</button>
+        <button class="secondary" onclick="getLoanById()">GET /loan/{id}</button>
+        <input id="loanId" type="number" placeholder="Loan ID for GET /loan/{id}" class="mt8" />
+        <p class="hint">Use a real EVM address format: <code>0x</code> + 40 hex chars. Placeholder text will be rejected.</p>
+        <p class="hint">Tip: this default wallet may still be rejected if it has no Sepolia history.</p>
+        <pre id="loanOut">Submit a loan request…</pre>
+      </section>
+
+      <section class="card">
+        <h3>3) Decision Logs</h3>
+        <button onclick="getDecisionLogs()">GET /decision-logs/</button>
+        <button class="secondary" onclick="getDecisionLogsForWallet()">GET /decision-logs/{wallet}</button>
+        <input id="walletLogs" placeholder="Wallet for decision logs (0x...)" class="mt8" />
+        <pre id="decisionOut">Load decision logs…</pre>
+      </section>
+
+      <section class="card">
+        <h3>4) Admin Endpoints</h3>
+        <button onclick="getTreasury()">GET /admin/treasury</button>
+        <button onclick="getLoans()">GET /admin/loans</button>
+        <button class="secondary" onclick="getUsers()">GET /admin/users</button>
+        <pre id="adminOut">Load admin data…</pre>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = `${window.location.protocol}//${window.location.host}`;
+    const DEFAULT_TREASURY_WALLET = '0xd724Fa9201aC6cd9a4dcAF6F4BD6E62a3B062442';
+    document.getElementById('apiBasePill').textContent = `API: ${API_BASE}`;
+    document.getElementById('walletLogs').value = DEFAULT_TREASURY_WALLET.toLowerCase();
+
+    function isValidWalletAddress(value) {
+      return /^0x[a-fA-F0-9]{40}$/.test(value || '');
+    }
+
+    function updateWalletState() {
+      const wallet = document.getElementById('wallet').value.trim();
+      const state = document.getElementById('walletState');
+      if (isValidWalletAddress(wallet)) {
+        state.className = 'ok';
+        state.textContent = 'Wallet format looks valid.';
+      } else {
+        state.className = 'bad';
+        state.textContent = 'Invalid wallet format. Use 0x + 40 hex chars.';
+      }
+    }
+
+    function fillTreasuryWallet() {
+      document.getElementById('wallet').value = DEFAULT_TREASURY_WALLET;
+      updateWalletState();
+    }
+
+    function copyWalletToLogs() {
+      const wallet = document.getElementById('wallet').value.trim();
+      document.getElementById('walletLogs').value = wallet.toLowerCase();
+    }
+
+    function pretty(data) {
+      return JSON.stringify(data, null, 2);
+    }
+
+    async function requestJSON(path, options = {}) {
+      const response = await fetch(`${API_BASE}${path}`, {
+        headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+        ...options,
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (_) {
+        data = { detail: await response.text() };
+      }
+
+      return {
+        ok: response.ok,
+        status: response.status,
+        data,
+      };
+    }
+
+    function setOut(elementId, payload) {
+      const el = document.getElementById(elementId);
+      el.textContent = typeof payload === 'string' ? payload : pretty(payload);
+    }
+
+    async function runHealth() {
+      try {
+        const result = await requestJSON('/health');
+        setOut('healthOut', result);
+      } catch (error) {
+        setOut('healthOut', { error: String(error) });
+      }
+    }
+
+    async function submitLoan() {
+      const wallet_address = document.getElementById('wallet').value.trim();
+      const loan_amount = Number(document.getElementById('amount').value);
+      const loan_duration = Number(document.getElementById('duration').value);
+
+      if (!isValidWalletAddress(wallet_address)) {
+        setOut('loanOut', {
+          ok: false,
+          status: 400,
+          data: {
+            detail: 'Invalid wallet format. Use 0x + 40 hex chars.',
+          },
+        });
+        return;
+      }
+
+      try {
+        const result = await requestJSON('/loan/request', {
+          method: 'POST',
+          body: JSON.stringify({ wallet_address, loan_amount, loan_duration }),
+        });
+        setOut('loanOut', result);
+      } catch (error) {
+        setOut('loanOut', { error: String(error) });
+      }
+    }
+
+    async function getLoanById() {
+      const loanId = document.getElementById('loanId').value;
+      if (!loanId) {
+        setOut('loanOut', { error: 'Enter a Loan ID first' });
+        return;
+      }
+
+      try {
+        const result = await requestJSON(`/loan/${loanId}`);
+        setOut('loanOut', result);
+      } catch (error) {
+        setOut('loanOut', { error: String(error) });
+      }
+    }
+
+    async function getDecisionLogs() {
+      try {
+        const result = await requestJSON('/decision-logs/');
+        setOut('decisionOut', result);
+      } catch (error) {
+        setOut('decisionOut', { error: String(error) });
+      }
+    }
+
+    async function getDecisionLogsForWallet() {
+      const wallet = document.getElementById('walletLogs').value.trim();
+      if (!wallet) {
+        setOut('decisionOut', { error: 'Enter a wallet address first' });
+        return;
+      }
+
+      if (!isValidWalletAddress(wallet)) {
+        setOut('decisionOut', { error: 'Invalid wallet format. Use 0x + 40 hex chars.' });
+        return;
+      }
+
+      try {
+        const result = await requestJSON(`/decision-logs/${wallet.toLowerCase()}`);
+        setOut('decisionOut', result);
+      } catch (error) {
+        setOut('decisionOut', { error: String(error) });
+      }
+    }
+
+    async function getTreasury() {
+      try {
+        const result = await requestJSON('/admin/treasury');
+        setOut('adminOut', result);
+      } catch (error) {
+        setOut('adminOut', { error: String(error) });
+      }
+    }
+
+    async function getLoans() {
+      try {
+        const result = await requestJSON('/admin/loans');
+        setOut('adminOut', result);
+      } catch (error) {
+        setOut('adminOut', { error: String(error) });
+      }
+    }
+
+    async function getUsers() {
+      try {
+        const result = await requestJSON('/admin/users');
+        setOut('adminOut', result);
+      } catch (error) {
+        setOut('adminOut', { error: String(error) });
+      }
+    }
+
+    document.getElementById('wallet').addEventListener('input', updateWalletState);
+    updateWalletState();
+  </script>
+</body>
+</html>
