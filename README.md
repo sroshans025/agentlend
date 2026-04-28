@@ -4,7 +4,7 @@
 AgentLend AI is a decentralized, autonomous lending ecosystem that merges **Artificial Intelligence** with **On-Chain Telemetry**. It evaluates borrower risk in real-time and executes USDT loans on the Ethereum Sepolia Testnet—all without human intervention.
 
 ![Web3](https://img.shields.io/badge/Web3-Ethereum_Sepolia-627EEA?style=for-the-badge&logo=ethereum&logoColor=white)
-![AI Engine](https://img.shields.io/badge/AI_Engine-AWS_Bedrock-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Engine](https://img.shields.io/badge/AI_Engine-AWS_Bedrock-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
 ![Tether WDK](https://img.shields.io/badge/Blockchain-Tether_WDK-009393?style=for-the-badge&logo=tether&logoColor=white)
 ![Vercel Ready](https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel&logoColor=white)
 
