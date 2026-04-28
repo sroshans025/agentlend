@@ -4,7 +4,7 @@
 AgentLend AI is a decentralized, autonomous lending ecosystem that merges **Artificial Intelligence** with **On-Chain Telemetry**. It evaluates borrower risk in real-time and executes USDT loans on the Ethereum Sepolia Testnet—all without human intervention.
 
 ![Web3](https://img.shields.io/badge/Web3-Ethereum_Sepolia-627EEA?style=for-the-badge&logo=ethereum&logoColor=white)
-![AI Engine](https://img.shields.io/badge/AI_Engine-Google_Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![AI Engine](https://img.shields.io/badge/AI_Engine-AWS_Bedrock-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
 ![Tether WDK](https://img.shields.io/badge/Blockchain-Tether_WDK-009393?style=for-the-badge&logo=tether&logoColor=white)
 ![Vercel Ready](https://img.shields.io/badge/Vercel-Deployed-black?style=for-the-badge&logo=vercel&logoColor=white)
 
@@ -12,7 +12,7 @@ AgentLend AI is a decentralized, autonomous lending ecosystem that merges **Arti
 
 ## 📖 Overview
 
-Traditional lending is hampered by manual overhead and centralized bias. **AgentLend AI** solves this by using a **Google Gemini-powered** risk engine to analyze wallet history and the **Tether WDK** for programmatic, secure disbursements.
+Traditional lending is hampered by manual overhead and centralized bias. **AgentLend AI** solves this by using an **AWS Bedrock-powered** risk engine to analyze wallet history and the **Tether WDK** for programmatic, secure disbursements.
 
 ### ✨ Key Features
 * **Autonomous Risk Assessment:** Real-time analysis of wallet age, transaction density, and liquidity patterns directly from the blockchain.
@@ -25,7 +25,7 @@ Traditional lending is hampered by manual overhead and centralized bias. **Agent
 ## 🏗️ Architecture
 
 The system is built on a modular 4-layer stack:
-1.  **Agent Layer:** Python-based AI microservices (`risk_agent.py`, `credit_score.py`) using the Google Gemini API.
+1.  **Agent Layer:** Python-based AI microservices (`risk_agent.py`, `credit_score.py`) using **AWS Bedrock**.
 2.  **Backend Layer:** FastAPI orchestrator managing the database (SQLAlchemy) and autonomous background loops.
 3.  **Blockchain Layer:** Integration with **Tether WDK** and Etherscan API for EVM-native transactions.
 4.  **Dashboard Layer:** A React/Next.js frontend providing a transparent interface for borrowers and auditors.
@@ -38,7 +38,7 @@ The system is built on a modular 4-layer stack:
 
 ## 🛠️ Tech Stack
 
-* **AI/LLM:** Google Gemini API (Explainable Risk Modeling)
+* **AI/LLM:** AWS Bedrock (Explainable Risk Modeling)
 * **Blockchain:** Ethereum Sepolia Testnet, Tether WDK, Web3.py
 * **Backend:** Python (FastAPI), Pydantic, SQLAlchemy
 * **Frontend:** React / Next.js, Tailwind CSS
@@ -71,5 +71,5 @@ The frontend dashboard is built with Next.js and is fully optimized for Vercel d
 1. Push your code to a GitHub repository.
 2. Go to the [Vercel Dashboard](https://vercel.com/dashboard) and click **Add New > Project**.
 3. Import your AgentLend AI repository.
-4. Add your Environment Variables (e.g., `NEXT_PUBLIC_ALCHEMY_API_KEY`, `GEMINI_API_KEY`, `PRIVATE_KEY`).
+4. Add your Environment Variables (e.g., `NEXT_PUBLIC_ALCHEMY_API_KEY`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `PRIVATE_KEY`).
 5. Click **Deploy**. Your decentralized autonomous AI lending agent will be live!
